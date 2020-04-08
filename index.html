@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -8,6 +7,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script type="text/javascript" src="data.js"></script>
+
 
     <title>07.04. 4C homework!</title>
 </head>
@@ -98,7 +99,7 @@
         crossorigin="anonymous"></script>
 <script>
     // object with loaded data - DO NOT change
-    let jsonData = [];
+    const jsonData = JSON.parse(data);
     // empty data table
     function emptyTable() {
       $('#data-content tbody').empty();
@@ -142,14 +143,10 @@
       $('#data-content tbody').append(rowContent);
     }
   $( document ).ready(function() {
-    $.getJSON("data.json")
-    .done(function (json) {
-      jsonData = json;
-      for (const d of json) {
-        addRow(d);
-      }
-      prepareSelects();
-    });
+    for (const d of jsonData) {
+      addRow(d);
+    }
+    prepareSelects();
     $('button[type="reset"]').click(function () {
       emptyTable();
       for (const d of jsonData) {
