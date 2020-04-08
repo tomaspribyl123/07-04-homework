@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>07.04. 4C homework!</title>
+</head>
+<body>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Domácí úkol pro 4.C</h1>
+        <p>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Zadání
+            </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <p class="lead">Níže vidíte tabulku s daty nad kterými jsou 4 selecty a reset button. Tyto data se načítají ze souboru data.json a pomocí cyklu se vpraví do níže zobrazené tabulky.</p>
+                <p>Vaším úkolem je s pomocí inputů vytvořit filtrovací funkce, které vám po změně vyfiltrují data v tabulce.</p>
+                <p>Tyto funkce si vytvářejte prosím až od řádku </p>
+                <p>Způsob hodnocení:</p>
+                <ul>
+                    <li>Aby jste nedostali 5 je nutné aby fungovali aspoň 2 filtry </li>
+                    <li>Na 3 jsou to funkční 3 filtry </li>
+                    <li>Na 2 budou funkční všechny filtry které jsou nyní nad tabulkou </li>
+                    <li>Ti z vás kteří chtějí dostat 1 vytvoří svůj vlastní filtrovací input pro cenu, způsob jakým to vymyslíte nechávám na vás </li>
+                </ul>
+                <p><b>Hodně štěstí</b></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mb-3" id="filter">
+    <div class="row">
+        <div class="col">
+            <select id="type-select" class="custom-select">
+                <option selected>Type</option>
+            </select>
+        </div>
+        <div class="col">
+            <select id="sub-type-select" class="custom-select">
+                <option selected>Subtype</option>
+            </select>
+        </div>
+        <div class="col">
+            <select id="offer-type-select" class="custom-select">
+                <option selected>Offer type</option>
+                <option value="sale">sale</option>
+                <option value="rent">rent</option>
+                <option value="auction">auction</option>
+            </select>
+        </div>
+        <div class="col">
+            <select id="energy-class-select" class="custom-select">
+                <option selected>Energy class</option>
+            </select>
+        </div>
+        <div class="col">
+            <input class="btn btn-primary btn-block" type="reset" value="Reset table">
+        </div>
+    </div>
+</div>
+<div class="container" id="data-content">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#uniqueId</th>
+            <th scope="col">Type</th>
+            <th scope="col">Subtype</th>
+            <th scope="col">Price</th>
+            <th scope="col">Offer type</th>
+            <th scope="col">Energy class</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script>
+    // object with loaded data - DO NOT change
+    let jsonData = [];
+    // empty data table
+    function emptyTable() {
+      $('#data-content tbody').empty();
+    }
+    // init selects
+    function prepareSelects() {
+      const selectTypes = [];
+      const selectSubTypes = [];
+      const energyClasses = [];
+      for (const jd of jsonData) {
+        if (selectTypes.indexOf(jd.type) === -1) {
+          selectTypes.push(jd.type);
+          if (jd.type !== undefined) {
+            $('select#type-select').append(new Option(jd.type, jd.type));
+          }
+        }
+        if (energyClasses.indexOf(jd.energyClass) === -1) {
+          energyClasses.push(jd.energyClass);
+          if (jd.energyClass !== undefined) {
+            $('select#energy-class-select').append(new Option(jd.energyClass, jd.energyClass));
+          }
+        }
+        if (selectSubTypes.indexOf(jd.subtype) === -1) {
+          selectSubTypes.push(jd.subtype);
+          if (jd.subtype !== undefined) {
+            $('select#sub-type-select').append(new Option(jd.subtype, jd.subtype));
+          }
+        }
+      }
+    }
+    // this function create table row
+    function addRow(data) {
+      const rowContent = '<tr>' +
+              `<td>${data.localUniqueId}</td>` +
+              `<td>${data.type}</td>` +
+              `<td>${data.subtype || ''}</td>` +
+              `<td>${data.price}</td>` +
+              `<td>${data.offerType}</td>` +
+              `<td>${data.energyClass || ''}</td>` +
+        '</tr>';
+      $('#data-content tbody').append(rowContent);
+    }
+  $( document ).ready(function() {
+    $.getJSON("data.json")
+    .done(function (json) {
+      jsonData = json;
+      for (const d of json) {
+        addRow(d);
+      }
+      prepareSelects();
+    });
+    $('button[type="reset"]').click(function () {
+      emptyTable();
+      for (const d of jsonData) {
+        addRow(d);
+      }
+    });
+    // Here will fallow function for filtering
+    $('#type-select').change(function () {
+      const selectedType = $(this).find('option:selected');
+      alert(`Set type: ${selectedType.text()}`);
+      emptyTable();
+      // TODO: filter data
+      console.log(jsonData);
+    });
+  });
+</script>
+</body>
+</html>
