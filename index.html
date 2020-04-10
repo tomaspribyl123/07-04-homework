@@ -53,9 +53,6 @@
         <div class="col">
             <select id="offer-type-select" class="custom-select">
                 <option selected>Offer type</option>
-                <option value="sale">sale</option>
-                <option value="rent">rent</option>
-                <option value="auction">auction</option>
             </select>
         </div>
         <div class="col">
@@ -64,7 +61,7 @@
             </select>
         </div>
         <div class="col">
-            <input class="btn btn-primary btn-block" type="reset" value="Reset table">
+            <input id="resetButton" class="btn btn-primary btn-block" type="reset" value="Reset table">
         </div>
     </div>
 </div>
@@ -108,7 +105,9 @@
     function prepareSelects() {
       const selectTypes = [];
       const selectSubTypes = [];
+      const selectOfferTypes = [];
       const energyClasses = [];
+
       for (const jd of jsonData) {
         if (selectTypes.indexOf(jd.type) === -1) {
           selectTypes.push(jd.type);
@@ -120,6 +119,12 @@
           energyClasses.push(jd.energyClass);
           if (jd.energyClass !== undefined) {
             $('select#energy-class-select').append(new Option(jd.energyClass, jd.energyClass));
+          }
+        }
+         if (selectOfferTypes.indexOf(jd.offerType) === -1) {
+          selectOfferTypes.push(jd.offerType);
+          if (jd.offerType !== undefined) {
+            $('select#offer-type-select').append(new Option(jd.offerType, jd.offerType));
           }
         }
         if (selectSubTypes.indexOf(jd.subtype) === -1) {
@@ -147,21 +152,59 @@
       addRow(d);
     }
     prepareSelects();
-    $('button[type="reset"]').click(function () {
+    $('#resetButton').click(function () {
       emptyTable();
       for (const d of jsonData) {
         addRow(d);
       }
     });
     // Here will fallow function for filtering
+
     $('#type-select').change(function () {
       const selectedType = $(this).find('option:selected');
-      alert(`Set type: ${selectedType.text()}`);
-      emptyTable();
-      // TODO: filter data
-      console.log(jsonData);
+        emptyTable();
+
+         for(const x of jsonData){
+            if(selectedType.text() == x.type){
+                addRow(x);
+            }
+         }
     });
-  });
+
+    $('#sub-type-select').change(function () {
+      const selectedSubType = $(this).find('option:selected');
+        emptyTable();
+
+         for(const x of jsonData){
+            if(selectedSubType.text() == x.subtype){
+                addRow(x);
+            }
+         }
+    });
+
+    $('#offer-type-select').change(function () {
+      const selectedOfferType = $(this).find('option:selected');
+        emptyTable();
+
+         for(const x of jsonData){
+            if(selectedOfferType.text() == x.offerType){
+                addRow(x);
+            }
+         }
+        });
+
+         $('#energy-class-select').change(function () {
+      const selectedEnergyClass = $(this).find('option:selected');
+        emptyTable();
+
+         for(const x of jsonData){
+            if(selectedEnergyClass.text() == x.energyClass){
+                addRow(x);
+            }
+         }
+    });
+    });
+  
 </script>
 </body>
 </html>
